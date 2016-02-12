@@ -38,7 +38,7 @@
         android:layout_height="95dp"
         android:id="@+id/listView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/direccion" />
 
     <Button
@@ -48,7 +48,7 @@
         android:id="@+id/buttonGo"
         android:layout_below="@+id/listView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/roundbutton"
         android:textColor="#ffff" />
 </RelativeLayout>

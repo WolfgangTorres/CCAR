@@ -30,7 +30,7 @@
         android:onClick="protegido"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:src="@drawable/lock_off" />
+        android:src="@drawable/ic_lock" />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         android:id="@+id/fab2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/localization_off"
+        android:src="@drawable/ic_show"
         android:onClick="localizado"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp" />

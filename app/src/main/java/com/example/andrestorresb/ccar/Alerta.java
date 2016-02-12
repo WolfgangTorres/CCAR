@@ -15,6 +15,7 @@ public class Alerta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alerta);
 
+        this.getSupportActionBar().hide();
 
         this.list=(ListView)findViewById(R.id.listView);
         ArrayList<Vehiculo> slist=new ArrayList<Vehiculo>();

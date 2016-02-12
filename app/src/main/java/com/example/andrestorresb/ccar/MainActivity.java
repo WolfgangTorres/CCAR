@@ -20,6 +20,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     FloatingActionButton fab,fab2;
     TextView txtV,txtV2;
     GoogleMap map;
+    Boolean flagProtegido=false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void protegido(View v){
-        this.fab.setBackgroundResource(R.drawable.lock_on);
-        this.txtV.setText("Protegido");
+        if(this.flagProtegido==false) {
+            this.txtV.setText("Protegido");
+            this.flagProtegido=true;
+        }
+        else if(this.flagProtegido==true){
+            this.txtV.setText("No Protegido");
+            this.flagProtegido=false;
+        }
     }
 
     public void localizado(View v){
