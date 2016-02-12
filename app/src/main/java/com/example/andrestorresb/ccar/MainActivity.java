@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -17,47 +19,75 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback{
 
-    FloatingActionButton fab,fab2;
-    TextView txtV,txtV2;
+    ImageButton protectionButton, localizationButton;
+    TextView statusProtectionLabel,txtV2;
     GoogleMap map;
-    Boolean flagProtegido=false;
+    Boolean statusProtection = false;
+
+    final String PROTECTION_ON = "Protegido";
+    final String PROTECTION_OFF = "No Protegido";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Left button
+        this.localizationButton = (ImageButton)findViewById(R.id.localizationButton);
+        this.localizationButton.setBackgroundResource(R.drawable.localization_off);
 
-        this.fab=(FloatingActionButton)findViewById(R.id.fab);
-        this.fab2=(FloatingActionButton)findViewById(R.id.fab2);
-        this.txtV=(TextView)findViewById(R.id.protegido);
-        this.txtV2=(TextView)findViewById(R.id.metros);
-        this.fab.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
-        this.fab2.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
+        //Right Button
+        this.protectionButton = (ImageButton)findViewById(R.id.protectionButton);
+        this.protectionButton.setBackgroundResource(R.drawable.lock_off);
 
+        //Status Protection Label
+        this.statusProtectionLabel = (TextView)findViewById(R.id.statusProtection);
+        this.txtV2 = (TextView)findViewById(R.id.metros);
+
+        //Generate google map
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapa);
         mapFragment.getMapAsync(this);
 
     }
 
-    public void protegido(View v){
-        if(this.flagProtegido==false) {
-            this.txtV.setText("Protegido");
-            this.flagProtegido=true;
-        }
-        else if(this.flagProtegido==true){
-            this.txtV.setText("No Protegido");
-            this.flagProtegido=false;
+    public void protect(View v){
+        //Not Protected; therefore protect
+        if(!this.statusProtection){
+            //Change status label
+            this.statusProtectionLabel.setText(PROTECTION_ON);
+
+            //Change protectionButton to lock ON
+            this.protectionButton.setBackgroundResource(R.drawable.lock_on);
+
+            //Change flag
+            this.statusProtection = true;
+
+        }else{
+            //Protected; therefore unprotect
+
+            //Change status label
+            this.statusProtectionLabel.setText(PROTECTION_OFF);
+
+            //Change protectionButton to lock OFF
+            this.protectionButton.setBackgroundResource(R.drawable.lock_off);
+
+            //Change flag
+            this.statusProtection = false;
         }
     }
 
-    public void localizado(View v){
+    public void localizado(View v) {
+        /*
         this.txtV.setText("Localizado");
         this.txtV2.setText("420 m de ti");
         this.fab.hide();
-        Intent i=new Intent(this,Alerta.class);
+        Intent i = new Intent(this, Alerta.class);
         startActivity(i);
+        */
+        //Would be better to make a another activity for localization
+        Toast.makeText(this, "Localizando...", Toast.LENGTH_SHORT).show();
+        this.localizationButton.setBackgroundResource(R.drawable.localization_on);
     }
 
     @Override

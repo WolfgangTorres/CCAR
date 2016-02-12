@@ -8,19 +8,27 @@ import java.util.ArrayList;
 
 public class Alerta extends AppCompatActivity {
 
-    ListView list;
+    ListView listCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alerta);
 
+        //Hide Top Bar
         this.getSupportActionBar().hide();
 
-        this.list=(ListView)findViewById(R.id.listView);
-        ArrayList<Vehiculo> slist=new ArrayList<Vehiculo>();
-        slist.add(new Vehiculo("Ferrari","Rojo", "FAW-ASF-REW"));
-        MyAdapter a=new MyAdapter(this, slist);
-        this.list.setAdapter(a);
+        //Get listview to show
+        this.listCar = (ListView)findViewById(R.id.listView);
+
+        //Generate array of cars
+        ArrayList<Vehiculo> slist = new ArrayList<Vehiculo>();
+
+        //Get data from firebase (brand, color, plates)
+        slist.add(new Vehiculo("Ferrari","Rojo", "FAW-ASF-RE"));
+        MyAdapter a = new MyAdapter(this, slist);
+
+        //Set adapter to list of cars
+        this.listCar.setAdapter(a);
     }
 }

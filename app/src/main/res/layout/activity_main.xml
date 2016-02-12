@@ -17,31 +17,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No Protegido"
-        android:id="@+id/protegido"
+        android:id="@+id/statusProtection"
         android:layout_alignTop="@+id/mapa"
-        android:layout_alignEnd="@+id/mapa" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fab"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="protegido"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/ic_lock" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fab2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/ic_show"
-        android:onClick="localizado"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_alignEnd="@+id/mapa"
+        android:background="#89000000"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:width="103dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,10 +36,28 @@
         android:layout_alignParentTop="false"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/fab2"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp" />
+
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:id="@+id/protectionButton"
+        android:background="@drawable/lock_off"
+        android:onClick="protect"
+        android:layout_alignBottom="@+id/metros"
+        android:layout_alignEnd="@+id/metros" />
+
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:id="@+id/localizationButton"
+        android:background="@drawable/localization_off"
+        android:onClick="localizado"
+        android:layout_marginStart="15dp"
+        android:layout_alignTop="@+id/protectionButton"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
