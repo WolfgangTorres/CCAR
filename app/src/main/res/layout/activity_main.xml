@@ -7,7 +7,7 @@
     tools:context="com.example.andrestorresb.ccar.MainActivity">
 
     <fragment
-        android:id="@+id/mapa"
+        android:id="@+id/map"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:text="No Protegido"
         android:id="@+id/statusProtection"
-        android:layout_alignTop="@+id/mapa"
-        android:layout_alignEnd="@+id/mapa"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignEnd="@+id/map"
         android:background="#89000000"
         android:textColor="#ffffff"
         android:textAlignment="center"
@@ -41,8 +41,8 @@
         android:layout_marginBottom="20dp" />
 
     <ImageButton
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
         android:id="@+id/protectionButton"
         android:background="@drawable/lock_off"
         android:onClick="protect"
@@ -50,11 +50,11 @@
         android:layout_alignEnd="@+id/metros" />
 
     <ImageButton
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
         android:id="@+id/localizationButton"
         android:background="@drawable/localization_off"
-        android:onClick="localizado"
+        android:onClick="locate"
         android:layout_marginStart="15dp"
         android:layout_alignTop="@+id/protectionButton"
         android:layout_alignParentStart="true" />
