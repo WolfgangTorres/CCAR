@@ -18,13 +18,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback{
 
     ImageButton protectionButton, localizationButton;
-    TextView statusProtectionLabel,txtV2;
+    TextView statusLabel,txtV2;
     GoogleMap map;
-    Boolean statusProtection = false;
+    Boolean statusProtection = false,
+            statusLocalization = false;
 
     final String PROTECTION_ON = "Protegido",
                  PROTECTION_OFF = "No Protegido",
-                 LOCALIZATION = "Localizando...";
+                 LOCALIZATION = "Localizando";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.protectionButton.setBackgroundResource(R.drawable.lock_off);
 
         //Status Protection Label
-        this.statusProtectionLabel = (TextView)findViewById(R.id.statusProtection);
+        this.statusLabel = (TextView)findViewById(R.id.statusLabel);
         this.txtV2 = (TextView)findViewById(R.id.metros);
 
         //Generate google map
@@ -57,7 +58,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             this.ShowToast(PROTECTION_ON, Toast.LENGTH_SHORT);
 
             //Change status label
-            this.statusProtectionLabel.setText(PROTECTION_ON);
+            this.statusLabel.setText(PROTECTION_ON);
 
             //Change protectionButton to lock ON
             this.protectionButton.setBackgroundResource(R.drawable.lock_on);
@@ -72,7 +73,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             this.ShowToast(PROTECTION_OFF, Toast.LENGTH_SHORT);
 
             //Change status label
-            this.statusProtectionLabel.setText(PROTECTION_OFF);
+            this.statusLabel.setText(PROTECTION_OFF);
 
             //Change protectionButton to lock OFF
             this.protectionButton.setBackgroundResource(R.drawable.lock_off);
@@ -83,11 +84,56 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void locate(View v) {
-        //Notify user change
-        this.ShowToast(LOCALIZATION, Toast.LENGTH_SHORT);
+        //Locate Car
+        if(!this.statusLocalization){
+            //Hide protectionButton
+            this.protectionButton.setVisibility(View.INVISIBLE);
 
-        //Set position of car (from CCAR Platform)
-        this.carLocate();
+            //Set status label
+            this.statusLabel.setText(LOCALIZATION);
+
+            //Change localizationButton to localization ON
+            this.localizationButton.setBackgroundResource(R.drawable.localization_on);
+
+            //Change flag
+            this.statusLocalization = true;
+
+            //Notify user change
+            this.ShowToast(LOCALIZATION, Toast.LENGTH_SHORT);
+
+            //Set position of car (from CCAR Platform)
+            this.carLocate();
+
+        }else{
+            //Exit from localization
+
+            //Show statusProtectionLabel, protectionButton
+            this.protectionButton.setVisibility(View.VISIBLE);
+
+            //Set status label to protection status
+            if(this.statusProtection) this.statusLabel.setText(PROTECTION_ON);
+            else this.statusLabel.setText(PROTECTION_OFF);
+
+            //Change localizationButton to localization OFF
+            this.localizationButton.setBackgroundResource(R.drawable.localization_off);
+
+            //Change flag
+            this.statusLocalization = false;
+        }
+    }
+
+    public void menu(View v) {
+        //Test: have to open slide menu
+        /*
+            Login
+
+            (photo circle) Hi Name
+            Profile
+            My Cars
+
+            Logout
+
+         */
     }
 
     @Override
