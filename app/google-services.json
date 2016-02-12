@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "default-demo-app-99593",
+    "project_number": "217894338838",
+    "name": "Default Demo App"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217894338838:android:f46ee1a798b22568",
+        "client_id": "android:com.example.andrestorresb.ccar",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.example.andrestorresb.ccar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217894338838-s8lkqenvohna8abroscq0gii93t7g2a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.andrestorresb.ccar",
+            "certificate_hash": "F676A681C5E7371C5E1D73528501CC9DEF163209"
+          }
+        },
+        {
+          "client_id": "217894338838-qpq8d61fljung9nckslkdqf55tiop65v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
