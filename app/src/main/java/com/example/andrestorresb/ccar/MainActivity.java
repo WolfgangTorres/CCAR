@@ -49,7 +49,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //CCAR Platform paths
     private final String DEVICES = "monitor/devices";
-    private final String USERS = "monitor/users/";
+    private final String USERS = "monitor/users";
 
     //Device
     private double lat = 0.0,
