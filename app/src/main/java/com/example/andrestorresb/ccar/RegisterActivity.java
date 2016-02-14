@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +16,7 @@ public class RegisterActivity extends AppCompatActivity implements JSONRequest.J
     private EditText emailInput,
                      passwordInput;
     private Button registerButton;
-    private String response = "ERROR";
+    private JSONObject response = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +47,34 @@ public class RegisterActivity extends AppCompatActivity implements JSONRequest.J
 
         new JSONRequest(this,this).execute(url);
 
-
-        if(this.response.equals("OK")){
-            //End this activity
-            finish();
-
-            //Go to Main Activity
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-        }else{
-            //Error ocurred; Email taken
-            Toast.makeText(this, "Ya existe ese email", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
     public void doSomething(JSONObject array) {
         try {
             //Get response value from CCAR Platform
-           this.response = array.getString("response");
+            this.response = array;
+
+            //Registered success
+            if(!this.response.getString("userID").toString().equals("null")){
+                //End this activity
+                finish();
+
+                //Go to Main Activity
+                Intent i = new Intent(this, MainActivity.class);
+
+                try {
+                    i.putExtra("userID", response.getString("userID").toString());
+                    i.putExtra("devices", response.getJSONArray("devices").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                startActivity(i);
+            }else{
+                //Error ocurred; Email taken
+                Toast.makeText(this, "Ya existe ese email", Toast.LENGTH_SHORT).show();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

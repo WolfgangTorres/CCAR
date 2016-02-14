@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements JSONRequest.JSONListener{
@@ -16,7 +16,6 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
     private EditText emailInput,
                      passwordInput;
     private Button loginButton;
-    private JSONObject response = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +52,34 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/login.php?email=" + this.emailInput.getText().toString() + "&password=" + this.passwordInput.getText().toString();
         new JSONRequest(this,this).execute(url);
 
-
-        //Valid credentials
-        if(this.response != null){
-            //End this activity
-            finish();
-
-            //Go to Main Activity
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-        }else{
-            //Wrong credentials
-            Toast.makeText(this, "Datos Incorrectos", Toast.LENGTH_SHORT).show();
-        }
-
-
     }
 
     @Override
     public void doSomething(JSONObject array) {
-        //obtiene la informacion del json y lo asigna a response
-        this.response = array;
+        //Valid credentials
+        try {
+            JSONObject response = array;
+
+            //If its valid user
+            if(!response.getString("userID").toString().equals("null")){
+                //End this activity
+                finish();
+
+                //Go to Main Activity
+                Intent i = new Intent(this, MainActivity.class);
+                try {
+                    i.putExtra("userID", response.getString("userID").toString());
+                    i.putExtra("devices", response.getJSONArray("devices").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(i);
+            }else{
+                //Wrong credentials
+                Toast.makeText(this, "Datos Incorrectos", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
