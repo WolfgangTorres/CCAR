@@ -244,7 +244,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         Log.d("Latitud", this.lat + "");
         Log.d("Longitud",this.lon+"");
-        Log.d("Time",this.timeLastLocation+"");
+        Log.d("Time", this.timeLastLocation + "");
 
         /*
             Result:
@@ -321,11 +321,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void doSomething(JSONArray array) {
+    public void doSomething(JSONObject array) {
         //el for por si hay mas de un solo lat,lon y time
         //for(int i=0;i<array.length()-1;i++) {
             try {
-                JSONObject jsonobj = array.getJSONObject(0);
+                JSONObject jsonobj = array;
                 this.lat=jsonobj.getDouble("lat");
                 this.lon=jsonobj.getDouble("lon");
                 this.timeLastLocation=jsonobj.getInt("time");
@@ -334,6 +334,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         //}
     }
-
-
 }

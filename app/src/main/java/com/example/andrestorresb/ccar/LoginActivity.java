@@ -9,13 +9,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements JSONRequest.JSONListener{
 
     private EditText emailInput,
                      passwordInput;
     private Button loginButton;
-    private JSONArray response = null;
+    private JSONObject response = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
 
 
         //Valid credentials
-        if(response != null){
+        if(this.response != null){
             //End this activity
             finish();
 
@@ -70,8 +71,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
     }
 
     @Override
-    public void doSomething(JSONArray array) {
+    public void doSomething(JSONObject array) {
         //obtiene la informacion del json y lo asigna a response
-        this.response=array;
+        this.response = array;
     }
 }

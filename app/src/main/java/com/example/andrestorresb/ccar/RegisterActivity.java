@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity implements JSONRequest.JSONListener {
 
@@ -43,10 +45,11 @@ public class RegisterActivity extends AppCompatActivity implements JSONRequest.J
                 ERROR: Incorrect
          */
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/registerOwner.php?email="+this.emailInput.getText().toString()+"&password="+this.passwordInput.getText().toString();
+
         new JSONRequest(this,this).execute(url);
 
 
-        if(response == "OK"){
+        if(this.response.equals("OK")){
             //End this activity
             finish();
 
@@ -54,15 +57,18 @@ public class RegisterActivity extends AppCompatActivity implements JSONRequest.J
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }else{
-            //Error ocurred
-            Toast.makeText(this, "Hubo un error :(", Toast.LENGTH_SHORT).show();
+            //Error ocurred; Email taken
+            Toast.makeText(this, "Ya existe ese email", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void doSomething(JSONArray array) {
-        if(array!=null){
-            this.response="OK";
+    public void doSomething(JSONObject array) {
+        try {
+            //Get response value from CCAR Platform
+           this.response = array.getString("response");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

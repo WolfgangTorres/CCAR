@@ -12,19 +12,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
-
-// AsyncTask <params, progress, result>
-// asynchronous task - a task that runs concurrently without stopping the main thread
-// normally used for streams - retrieve from web, read a big file, etc
-
-//
-public class JSONRequest extends AsyncTask<String, Void, JSONArray> {
+public class JSONRequest extends AsyncTask<String, Void, JSONObject> {
 
     private Activity activity;
     private JSONListener listener;
@@ -35,16 +29,13 @@ public class JSONRequest extends AsyncTask<String, Void, JSONArray> {
         this.listener = listener;
     }
 
-    // doInBackground("a", "b", "c")
-    // doInBackground("a", "b")
-
     @Override
-    protected JSONArray doInBackground(String... params) {
+    protected JSONObject doInBackground(String... params) {
 
         HttpGet get = new HttpGet(params[0]);
         StringBuilder sb = new StringBuilder();
         HttpClient client = new DefaultHttpClient();
-        JSONArray theArray = null;
+        JSONObject theArray = null;
 
         try {
 
@@ -53,7 +44,6 @@ public class JSONRequest extends AsyncTask<String, Void, JSONArray> {
             int code = sl.getStatusCode();
 
             if(code == 200){
-
 
                 // object that contains data from response
                 HttpEntity entity = response.getEntity();
@@ -69,7 +59,7 @@ public class JSONRequest extends AsyncTask<String, Void, JSONArray> {
                 }
             }
 
-            theArray = new JSONArray(sb.toString());
+            theArray = new JSONObject(sb.toString());
 
         }catch (Exception e) {
 
@@ -80,17 +70,21 @@ public class JSONRequest extends AsyncTask<String, Void, JSONArray> {
 
 
     @Override
-    protected void onPostExecute(JSONArray jsonArray) {
+    protected void onPostExecute(JSONObject jsonArray) {
 
         if(jsonArray != null) {
-            Toast.makeText(activity, "JSON READ succesfully", Toast.LENGTH_SHORT).show();
+            //Successfully read JSON
             listener.doSomething(jsonArray);
-        } else
-            Toast.makeText(activity, "FAILURE ='(", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        //Error reading JSON
+
     }
 
     public interface JSONListener {
 
-        void doSomething(JSONArray array);
+        void doSomething(JSONObject array);
     }
 }
