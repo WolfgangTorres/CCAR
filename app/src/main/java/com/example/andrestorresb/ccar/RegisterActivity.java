@@ -8,11 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class RegisterActivity extends AppCompatActivity {
+import org.json.JSONArray;
+
+public class RegisterActivity extends AppCompatActivity implements JSONRequest.JSONListener {
 
     private EditText emailInput,
                      passwordInput;
     private Button registerButton;
+    private String response = "ERROR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
                 ERROR: Incorrect
          */
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/registerOwner.php?email="+this.emailInput.getText().toString()+"&password="+this.passwordInput.getText().toString();
+        new JSONRequest(this,this).execute(url);
 
-        String response = "OK";
 
         if(response == "OK"){
             //End this activity
@@ -53,6 +56,13 @@ public class RegisterActivity extends AppCompatActivity {
         }else{
             //Error ocurred
             Toast.makeText(this, "Hubo un error :(", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void doSomething(JSONArray array) {
+        if(array!=null){
+            this.response="OK";
         }
     }
 }

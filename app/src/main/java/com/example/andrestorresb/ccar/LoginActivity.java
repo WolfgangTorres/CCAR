@@ -8,11 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import org.json.JSONArray;
+
+public class LoginActivity extends AppCompatActivity implements JSONRequest.JSONListener{
 
     private EditText emailInput,
                      passwordInput;
     private Button loginButton;
+    private JSONArray response = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //Validate credentials from CCAR Platform
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/login.php?email=" + this.emailInput.getText().toString() + "&password=" + this.passwordInput.getText().toString();
+        new JSONRequest(this,this).execute(url);
 
-        String response = null;
 
         //Valid credentials
         if(response != null){
@@ -64,5 +67,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public void doSomething(JSONArray array) {
+        //obtiene la informacion del json y lo asigna a response
+        this.response=array;
     }
 }

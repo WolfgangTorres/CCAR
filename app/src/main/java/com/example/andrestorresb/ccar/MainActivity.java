@@ -2,6 +2,7 @@ package com.example.andrestorresb.ccar;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,7 +22,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener{
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener,JSONRequest.JSONListener{
 
     private ImageButton protectionButton, localizationButton;
     private TextView statusLabel,txtV2;
@@ -83,11 +88,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Log.d("Latitud", this.lat + "");
+        Log.d("Longitud", this.lon + "");
+        Log.d("Time",this.timeLastLocation+"");
     }
 
     public void protect(View v){
         //Not Protected; therefore protect
         if(!this.statusProtection){
+            //Change flag
+            this.statusProtection = true;
             //Send request to CCAR Platform
             String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/protectCar.php?devID=" + this.deviceID;
 
@@ -100,12 +110,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //Change protectionButton to lock ON
             this.protectionButton.setBackgroundResource(R.drawable.lock_on);
 
-            //Change flag
-            this.statusProtection = true;
 
         }else{
             //Protected; therefore unprotect
-
+            //Change flag
+            this.statusProtection = false;
             //Send request to CCAR Platform
             String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/unprotectCar.php?devID=" + this.deviceID;
 
@@ -220,6 +229,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.fb.authWithCustomToken(FIREBASE_TOKEN, this);
     }
 
+
+
     //Retrieve Device Location from CCAR Platform
     private void getDeviceLocation(){
         this.actionFirebase = GET_CAR_LOCATION;
@@ -229,6 +240,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Get location from CCAR Platform
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceLocation.php?devID=" + this.deviceID;
+        new JSONRequest(this,this).execute(url);
+
+        Log.d("Latitud", this.lat + "");
+        Log.d("Longitud",this.lon+"");
+        Log.d("Time",this.timeLastLocation+"");
 
         /*
             Result:
@@ -236,6 +252,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     "lat":20.6747568,
                     "lon":-103.445001,
                     "time":1453178575
+
                 }
          */
     }
@@ -302,4 +319,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onCancelled(FirebaseError firebaseError) {
 
     }
+
+    @Override
+    public void doSomething(JSONArray array) {
+        //el for por si hay mas de un solo lat,lon y time
+        //for(int i=0;i<array.length()-1;i++) {
+            try {
+                JSONObject jsonobj = array.getJSONObject(0);
+                this.lat=jsonobj.getDouble("lat");
+                this.lon=jsonobj.getDouble("lon");
+                this.timeLastLocation=jsonobj.getInt("time");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        //}
+    }
+
+
 }
