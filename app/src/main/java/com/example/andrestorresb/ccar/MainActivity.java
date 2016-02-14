@@ -87,6 +87,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void protect(View v){
         //Not Protected; therefore protect
         if(!this.statusProtection){
+            //Send request to CCAR Platform
+            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/protectCar.php?devID=renato";
+
             //Notify user change
             this.ShowToast(PROTECTION_ON, Toast.LENGTH_SHORT);
 
@@ -101,6 +104,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         }else{
             //Protected; therefore unprotect
+
+            //Send request to CCAR Platform
+            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/unprotectCar.php?devID=renato";
 
             //Notify user change
             this.ShowToast(PROTECTION_OFF, Toast.LENGTH_SHORT);
@@ -175,11 +181,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Set position of car (from CCAR Platform)
         this.map = map;
 
-        //Get car location from CCAR Platform
+        //Get & Set car location from CCAR Platform
         this.getDeviceLocation();
-
-        //Set car location from CCAR Platform
-        this.carLocate();
     }
 
     //Generate notification
