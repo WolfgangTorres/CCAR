@@ -45,7 +45,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Firebase status
     private int actionFirebase = 0;
-    private final int GET_CAR_LOCATION = 0;
+    private final int GET_CAR_LOCATION = 0,
+                      GET_DEVICE_PROTECTION = 1;
 
     //CCAR Platform paths
     private final String DEVICES = "monitor/devices";
@@ -55,7 +56,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private double lat = 0.0,
                    lon = 0.0;
     private int timeLastLocation = 0;
-
+    private String deviceID = "renato"; //Retrieve somehow from CCAR Platform (at login)
 
     
     @Override
@@ -88,7 +89,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Not Protected; therefore protect
         if(!this.statusProtection){
             //Send request to CCAR Platform
-            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/protectCar.php?devID=renato";
+            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/protectCar.php?devID=" + this.deviceID;
 
             //Notify user change
             this.ShowToast(PROTECTION_ON, Toast.LENGTH_SHORT);
@@ -106,7 +107,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //Protected; therefore unprotect
 
             //Send request to CCAR Platform
-            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/unprotectCar.php?devID=renato";
+            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/unprotectCar.php?devID=" + this.deviceID;
 
             //Notify user change
             this.ShowToast(PROTECTION_OFF, Toast.LENGTH_SHORT);
@@ -224,8 +225,40 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.actionFirebase = GET_CAR_LOCATION;
 
         //Get location from CCAR Platform
-        String deviceID = "renato";
-        this.fb.child(DEVICES + "/" + deviceID + "/location").addValueEventListener(this);
+        this.fb.child(DEVICES + "/" + this.deviceID + "/location").addValueEventListener(this);
+
+        //Get location from CCAR Platform
+        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceLocation.php?devID=" + this.deviceID;
+
+        /*
+            Result:
+                {
+                    "lat":20.6747568,
+                    "lon":-103.445001,
+                    "time":1453178575
+                }
+         */
+    }
+
+    private void getDeviceProtection(){
+        this.actionFirebase = GET_DEVICE_PROTECTION;
+
+        //Get device protection from CCAR Platform
+        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceProtection.php?devID=" + this.deviceID;
+
+        /*
+            Result:
+                true: Protection ON
+                false: Protection OFF
+         */
+
+        String response = "";
+
+        if(response == "true"){
+            this.statusProtection = true;
+        }else{
+            this.statusProtection = false;
+        }
     }
 
     //Firebase callback on Auth
