@@ -37,16 +37,21 @@ public class LoginActivity extends AppCompatActivity {
         //Request CCAR Platform to login
         /*
             Result:
-                OK: Correct
-                otherwise: Incorrect
+                Correct
+                {
+                    "userID":"-KASHqKGIjEhpt8w4NLh",
+                    "devices":[]
+                }
+                null: Incorrect
          */
 
-        //(Pendiente script, te aviso)
+        //Validate credentials from CCAR Platform
+        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/login.php?email=" + this.emailInput.getText().toString() + "&password=" + this.passwordInput.getText().toString();
 
-        String response = "OK";
+        String response = null;
 
         //Valid credentials
-        if(response == "OK"){
+        if(response != null){
             //End this activity
             finish();
 

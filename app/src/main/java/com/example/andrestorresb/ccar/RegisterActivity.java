@@ -37,9 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
         /*
             Result:
                 OK: Correct
-                otherwise: Incorrect
+                ERROR: Incorrect
          */
-        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/registerOwner.php?devID=1&email="+this.emailInput.getText().toString()+"&password="+this.passwordInput.getText().toString();
+        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/registerOwner.php?email="+this.emailInput.getText().toString()+"&password="+this.passwordInput.getText().toString();
 
         String response = "OK";
 
