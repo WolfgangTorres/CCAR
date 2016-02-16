@@ -22,9 +22,9 @@ public class Mycars extends AppCompatActivity implements JSONRequest.JSONListene
 
         this.getSupportActionBar().setTitle("Borrar vehiculos");
 
-        this.modelo=(TextView)findViewById(R.id.modelo);
-        this.imgbtn=(ImageButton)findViewById(R.id.delete);
-        this.i=getIntent();
+        this.modelo = (TextView)findViewById(R.id.modelo);
+        this.imgbtn = (ImageButton)findViewById(R.id.delete);
+        this.i = getIntent();
 
 
     }

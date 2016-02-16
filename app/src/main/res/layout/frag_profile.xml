@@ -11,7 +11,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="81dp"
         android:hint="Nombre"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -21,7 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:hint="Apellido"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:singleLine="true" />
 
     <Button
         android:layout_width="wrap_content"
