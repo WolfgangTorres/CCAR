@@ -256,6 +256,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Logout
 
          */
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
+        drawer.openDrawer(GravityCompat.START);
     }
 
     @Override

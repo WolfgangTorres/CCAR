@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
 
     private Properties credentials;
     private String credentialsFile = "credentials.xml";
+    private FileOutputStream fos;
 
     private String email = null;
     private String password = null;
@@ -76,8 +77,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 //Create credentials for the first time
 
                 //Create file
-                FileOutputStream fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
-                this.credentials.storeToXML(fos, null);
+                this.fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
+                this.credentials.storeToXML(this.fos, null);
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -125,6 +126,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 //Save credentials
                 this.credentials.setProperty("email", this.email);
                 this.credentials.setProperty("password", this.password);
+
+                //this.credentials.storeToXML(this.fos, null);
 
                 //End this activity
                 finish();
