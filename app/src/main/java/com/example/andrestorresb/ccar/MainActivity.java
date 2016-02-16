@@ -409,22 +409,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         int id = item.getItemId();
 
         if (id == R.id.profile) {
-           /* Fragment fragment = new ProfileFrag();
-            Bundle args = new Bundle();
-            args.putInt(ProfileFrag.ARG_EXA_NUMBER, id);
-            fragment.setArguments(args);
-
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit();*/
-
-            // Highlight the selected item, update the title, and close the drawer
-
+            Intent i=new Intent(this, ProfileFrag.class);
+            i.putExtra("userID",this.userID);
+            startActivity(i);
         } else if (id == R.id.car) {
-
+            Intent i=new Intent(this, Mycars.class);
+            i.putExtra("userID",this.userID);
+            i.putExtra("deviceID",this.deviceID);
+            startActivity(i);
         } else if (id == R.id.logout) {
+            Intent i=new Intent(this,LoginActivity.class);
+            startActivity(i);
+            finish();
 
         }
 
