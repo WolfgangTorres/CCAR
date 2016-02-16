@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 //Auto login
                 this.login(null);
 
+                //Set output file
                 this.fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
 
                 this.initCredentials = false;
@@ -129,9 +130,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 this.credentials.setProperty("email", this.email);
                 this.credentials.setProperty("password", this.password);
 
+                //Save to File
                 this.credentials.storeToXML(fos, null);
-
-                //this.credentials.storeToXML(this.fos, null);
 
                 //End this activity
                 finish();
