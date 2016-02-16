@@ -3,7 +3,11 @@ package com.example.andrestorresb.ccar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,7 +18,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,7 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener, JSONRequest.JSONListener{
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener, JSONRequest.JSONListener,NavigationView.OnNavigationItemSelectedListener{
 
     private ImageButton protectionButton, localizationButton;
     private TextView statusLabel,txtV2;
@@ -69,11 +72,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private JSONObject response;
 
+    private DrawerLayout menu;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.menu=(DrawerLayout)findViewById(R.id.menu);
+        NavigationView navigationView=(NavigationView)findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         //Left button
         this.localizationButton = (ImageButton)findViewById(R.id.localizationButton);
@@ -393,5 +402,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 break;
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.profile) {
+            Intent i=new Intent(this, ProfileFrag.class);
+            i.putExtra("userID",this.userID);
+            startActivity(i);
+        } else if (id == R.id.car) {
+            Intent i=new Intent(this, Mycars.class);
+            i.putExtra("userID",this.userID);
+            i.putExtra("deviceID",this.deviceID);
+            startActivity(i);
+        } else if (id == R.id.logout) {
+            Intent i=new Intent(this,LoginActivity.class);
+            startActivity(i);
+            finish();
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
