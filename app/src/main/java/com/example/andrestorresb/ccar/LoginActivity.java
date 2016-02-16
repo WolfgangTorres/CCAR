@@ -72,6 +72,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 //Auto login
                 this.login(null);
 
+                this.fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
+
                 this.initCredentials = false;
             }else{
                 //Create credentials for the first time
@@ -127,6 +129,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 this.credentials.setProperty("email", this.email);
                 this.credentials.setProperty("password", this.password);
 
+                this.credentials.storeToXML(fos, null);
+
                 //this.credentials.storeToXML(this.fos, null);
 
                 //End this activity
@@ -146,6 +150,8 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 Toast.makeText(this, "Datos Incorrectos", Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
