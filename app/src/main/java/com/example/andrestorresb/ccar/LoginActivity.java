@@ -1,5 +1,6 @@
 package com.example.andrestorresb.ccar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +12,25 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class LoginActivity extends AppCompatActivity implements JSONRequest.JSONListener{
 
     private EditText emailInput,
                      passwordInput;
     private Button loginButton;
+
+    private Properties credentials;
+    private String credentialsFile = "credentials.xml";
+
+    private String email = null;
+    private String password = null;
+
+    private boolean initCredentials = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +43,45 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
         this.emailInput = (EditText)findViewById(R.id.emailInput);
         this.passwordInput = (EditText)findViewById(R.id.passwordInput);
         this.loginButton = (Button)findViewById(R.id.loginButton);
+
+        //Set Login Credentials
+        this.setLoginCredentials();
+
+    }
+
+    private void setLoginCredentials(){
+        File file = new File( getFilesDir(), this.credentialsFile );
+        this.credentials = new Properties();
+
+        try{
+            if(file.exists()){
+                //Load credentials if login success (previous)
+
+                this.initCredentials = true;
+
+                //Read file
+                FileInputStream fis = openFileInput( this.credentialsFile );
+                this.credentials.loadFromXML( fis );
+                fis.close();
+
+                //Read & set credentials
+                this.email = this.credentials.getProperty("email");
+                this.password = this.credentials.getProperty("password");
+
+                //Auto login
+                this.login(null);
+
+                this.initCredentials = false;
+            }else{
+                //Create credentials for the first time
+
+                //Create file
+                FileOutputStream fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
+                this.credentials.storeToXML(fos, null);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -48,8 +102,14 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 null: Incorrect
          */
 
+        //Not First time app opened
+        if(!this.initCredentials){
+            this.email = this.emailInput.getText().toString();
+            this.password = this.passwordInput.getText().toString();
+        }
+
         //Validate credentials from CCAR Platform
-        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/login.php?email=" + this.emailInput.getText().toString() + "&password=" + this.passwordInput.getText().toString();
+        String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/login.php?email=" + this.email + "&password=" + this.password;
         new JSONRequest(this,this).execute(url);
 
     }
@@ -62,6 +122,10 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
 
             //If its valid user
             if(!response.getString("userID").toString().equals("null")){
+                //Save credentials
+                this.credentials.setProperty("email", this.email);
+                this.credentials.setProperty("password", this.password);
+
                 //End this activity
                 finish();
 
