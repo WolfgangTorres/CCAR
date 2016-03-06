@@ -14,24 +14,26 @@
         android:src="@drawable/pin_cristalazo" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="250 m"
-        android:id="@+id/distancia"
+        android:text="0 m"
+        android:id="@+id/distance"
         android:layout_below="@+id/imageView"
         android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Av. Mexico #30"
-        android:id="@+id/direccion"
-        android:layout_below="@+id/distancia"
+        android:text="Unknow address"
+        android:id="@+id/address"
+        android:layout_below="@+id/distance"
         android:layout_marginTop="1dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -39,7 +41,7 @@
         android:id="@+id/listView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/direccion" />
+        android:layout_below="@+id/address" />
 
     <Button
         android:layout_width="100dp"

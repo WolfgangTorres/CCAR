@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
     private Button loginButton;
 
     private Properties credentials;
-    private String credentialsFile = "credentials.xml";
+    public static String credentialsFile = "credentials.xml";
     private FileOutputStream fos;
 
     private String email = null;
@@ -45,6 +45,9 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
         this.passwordInput = (EditText)findViewById(R.id.passwordInput);
         this.loginButton = (Button)findViewById(R.id.loginButton);
 
+        //Without doesnt log in, CHECK!
+        new File(getFilesDir(), this.credentialsFile).delete();
+
         //Set Login Credentials
         this.setLoginCredentials();
 
@@ -57,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
         try{
             if(file.exists()){
                 //Load credentials if login success (previous)
-
                 this.initCredentials = true;
 
                 //Read file
@@ -73,11 +75,12 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
                 this.login(null);
 
                 //Set output file
-                this.fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
+                this.fos = openFileOutput(this.credentialsFile, Context.MODE_PRIVATE);
 
                 this.initCredentials = false;
             }else{
                 //Create credentials for the first time
+                this.initCredentials = false;
 
                 //Create file
                 this.fos = openFileOutput( this.credentialsFile, Context.MODE_PRIVATE );
@@ -126,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements JSONRequest.JSON
 
             //If its valid user
             if(!response.getString("userID").toString().equals("null")){
+
                 //Save credentials
                 this.credentials.setProperty("email", this.email);
                 this.credentials.setProperty("password", this.password);
