@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" android:id="@+id/menu1">
     <item
         android:id="@+id/profile"
+        android:icon="@drawable/ic_person_black"
         android:title="Profile" />
     <item
         android:id="@+id/car"
+        android:icon="@drawable/ic_directions_car_black"
         android:title="My Cars" />
     <item
         android:id="@+id/logout"
+        android:icon="@drawable/ic_settings_power_black"
         android:title="Logout" />
 
-</group>
-
+    </group>
+    <group android:checkableBehavior="none" android:id="@+id/menu2" >
+        <item
+            android:id="@+id/imageView"
+            android:icon="@drawable/user_icon"
+            android:title="Andres Torres"/>
+    </group>
 </menu>

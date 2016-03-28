@@ -9,25 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.andrestorresb.ccar.Mycars">
 
-    <TextView
-        android:layout_width="250dp"
+
+    <ListView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Ferrari"
-        android:id="@+id/modelo"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:textAlignment="center" />
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:id="@+id/delete"
-        android:layout_marginLeft="30dp"
-        android:src="@drawable/x"
-        android:scaleType="fitXY"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/modelo"
-        android:onClick="eliminar" />
-
+        android:id="@+id/listView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

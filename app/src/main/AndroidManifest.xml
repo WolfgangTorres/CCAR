@@ -23,6 +23,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
@@ -32,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".Alerta" />
 
         <meta-data
@@ -50,8 +51,9 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ProfileFrag"/>
-        <activity android:name=".Mycars"></activity>
+        <activity android:name=".ProfileFrag" />
+        <activity android:name=".Mycars" />
+        <activity android:name=".Editar"></activity>
     </application>
 
 </manifest>
