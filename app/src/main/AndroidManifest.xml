@@ -52,6 +52,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProfileFrag"/>
         <activity android:name=".Mycars"></activity>
+        <activity android:name=".Editar"></activity>
     </application>
 
 </manifest>
