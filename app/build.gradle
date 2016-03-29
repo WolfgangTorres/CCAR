@@ -38,6 +38,7 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.4'
     compile 'com.firebase:firebase-client-android:2.5.0'
     compile 'com.google.maps:google-maps-services:0.1.5'
+    compile 'com.mikhaellopez:circularimageview:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

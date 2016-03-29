@@ -17,7 +17,7 @@
     </group>
     <group android:checkableBehavior="none" android:id="@+id/menu2" >
         <item
-            android:id="@+id/imageView"
+            android:id="@+id/informacion"
             android:icon="@drawable/user_icon"
             android:title="Andres Torres"/>
     </group>

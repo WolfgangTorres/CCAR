@@ -2,7 +2,8 @@ package com.example.andrestorresb.ccar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,10 @@ import org.json.JSONObject;
 /**
  * Created by andrestorres on 2/15/16.
  */
-public class ProfileFrag extends AppCompatActivity implements JSONRequest.JSONListener{
+public class ProfileFrag extends ActionBarActivity implements JSONRequest.JSONListener{
     private EditText nameInput, lastnameInput;
     private Button save;
-    private Intent i;
+
 
     private String userID;
     private String userName;
@@ -34,6 +35,8 @@ public class ProfileFrag extends AppCompatActivity implements JSONRequest.JSONLi
 
         //Hide Top Bar
         this.getSupportActionBar().setTitle("Editar Usuario");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         this.nameInput = (EditText)findViewById(R.id.cambiarNombre);
         this.lastnameInput = (EditText)findViewById(R.id.cambiarApellido);
@@ -101,5 +104,12 @@ public class ProfileFrag extends AppCompatActivity implements JSONRequest.JSONLi
 
                 break;
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 }

@@ -73,6 +73,7 @@
 
         android:layout_marginTop="66dp"
         android:layout_below="@+id/editPlacas"
-        android:layout_toEndOf="@+id/labelModelo" />
+        android:layout_toEndOf="@+id/labelModelo"
+        android:onClick="guardar" />
 
 </RelativeLayout>

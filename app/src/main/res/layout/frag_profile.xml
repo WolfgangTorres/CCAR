@@ -4,26 +4,25 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cambiarNombre"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp"
+        android:layout_marginTop="240dp"
         android:hint="Nombre"
         android:textAlignment="center"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:layout_marginLeft="102dp" />
 
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cambiarApellido"
-        android:layout_below="@+id/cambiarNombre"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
         android:hint="Apellido"
         android:textAlignment="center"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:layout_alignTop="@+id/cambiarNombre"
+        android:layout_toEndOf="@+id/cambiarNombre" />
 
     <Button
         android:layout_width="wrap_content"
@@ -34,4 +33,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="75dp"
         android:onClick="guardarDatos" />
+
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/user_icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 </RelativeLayout>

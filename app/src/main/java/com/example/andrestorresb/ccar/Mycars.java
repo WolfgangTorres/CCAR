@@ -3,7 +3,7 @@ package com.example.andrestorresb.ccar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Mycars extends AppCompatActivity implements JSONRequest.JSONListener, AdapterView.OnItemLongClickListener, ActionMode.Callback {
+public class Mycars extends ActionBarActivity implements JSONRequest.JSONListener, AdapterView.OnItemLongClickListener, ActionMode.Callback {
 
     TextView modelo,color,placas;
     Intent i;
@@ -31,6 +31,8 @@ public class Mycars extends AppCompatActivity implements JSONRequest.JSONListene
         setContentView(R.layout.activity_mycars);
 
         this.getSupportActionBar().setTitle("Vehiculos");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         this.lv=(ListView)findViewById(R.id.listView2);
 
@@ -66,7 +68,7 @@ public class Mycars extends AppCompatActivity implements JSONRequest.JSONListene
         al.add(this.modelo.getText().toString());
         al.add(this.color.getText().toString());
         al.add(this.placas.getText().toString());
-        i.putStringArrayListExtra("carro",al);
+        i.putStringArrayListExtra("carro", al);
         startActivity(i);
     }
 
@@ -125,5 +127,12 @@ public class Mycars extends AppCompatActivity implements JSONRequest.JSONListene
         mode=null;
         this.v.setSelected(false);
         this.v.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 }

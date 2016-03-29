@@ -502,16 +502,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Profile clicked
         if (id == R.id.profile) {
             this.openProfile();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.car) {
             //Cars clicked
             this.viewCars();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.logout) {
             //Logout clicked
             this.logout();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if(id==R.id.informacion){
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

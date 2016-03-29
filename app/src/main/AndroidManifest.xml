@@ -50,9 +50,10 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ProfileFrag"/>
+        <activity android:name=".ProfileFrag" />
         <activity android:name=".Mycars"></activity>
-        <activity android:name=".Editar"></activity>
+        <activity android:name=".Editar"
+                android:parentActivityName=".Mycars"></activity>
     </application>
 
 </manifest>
