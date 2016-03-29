@@ -1,6 +1,5 @@
 package com.example.andrestorresb.ccar;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -31,7 +31,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener, JSONRequest.JSONListener,NavigationView.OnNavigationItemSelectedListener{
+import java.io.File;
+import java.io.Serializable;
+
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, Firebase.AuthResultHandler, ValueEventListener, ChildEventListener, JSONRequest.JSONListener,NavigationView.OnNavigationItemSelectedListener{
 
     private ImageButton protectionButton, localizationButton;
     private TextView statusLabel,txtV2;
@@ -57,7 +60,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private int actionFirebase = 0;
     private final int GET_CAR_LOCATION = 0,
                       GET_DEVICE_PROTECTION = 1,
-                      SET_DEVICE_PROTECTION = 2;
+                      SET_DEVICE_PROTECTION = 2,
+                      LISTEN_CRISTALAZO_ALERT = 3;
+    private boolean newChildAdded = false;
 
     //CCAR Platform paths
     private final String DEVICES = "/devices";
@@ -140,6 +145,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.getDeviceProtection();
 
         //Set user info
+
+        //Listen Cristalazo Alert
+        this.listenCristalazoAlert();
     }
 
     //Change state of components when protect ON || OFF
@@ -328,6 +336,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
          */
     }
 
+    private void listenCristalazoAlert(){
+
+        //Listen event of Cristalazo Alert
+        this.actionFirebase = LISTEN_CRISTALAZO_ALERT;
+
+        if( !this.deviceID.equals("") ) this.fb.child(DEVICES + "/" + this.deviceID + "/alerts").limitToLast(1).addChildEventListener(this);
+    }
+
     //Firebase callback on Auth
     @Override
     public void onAuthenticated(AuthData authData) {
@@ -363,6 +379,53 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 break;
         }
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+        //Fire only when cristalazo alert occurs; avoid initial retrieve
+        if(this.newChildAdded) {
+            //Initialize Cristalazo Alert Activity
+            final Intent i = new Intent(this, Alerta.class);
+
+            //Send cristalazo alert data
+            i.putExtra("alert", (Serializable) dataSnapshot.getValue());
+
+            //Get car info
+            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceCarInfo.php?devID=" + this.deviceID;
+            new JSONRequest(this, new JSONRequest.JSONListener() {
+                @Override
+                public void doSomething(JSONObject array) {
+                    try {
+                        //Sent car info
+                        i.putExtra("car", array.getJSONObject("response").toString());
+
+                        //Initialize Cristalazo Alert Activity
+                        startActivity(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(url);
+        }
+
+        this.newChildAdded = true;
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
     }
 
     @Override
@@ -406,25 +469,45 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void viewCars(){
+        Intent i=new Intent(this, Mycars.class);
+        i.putExtra("userID",this.userID);
+        i.putExtra("deviceID",this.deviceID);
+        startActivity(i);
+    }
+
+    private void openProfile(){
+        Intent i=new Intent(this, ProfileFrag.class);
+        i.putExtra("userID",this.userID);
+        startActivity(i);
+    }
+
+    private void logout(){
+        //Destroy properties xml (auto login)
+        new File(getFilesDir(), LoginActivity.credentialsFile).delete();
+
+        //End Main Activity
+        finish();
+
+        //Start Login Activity
+        Intent i=new Intent(this,LoginActivity.class);
+        startActivity(i);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        //Profile clicked
         if (id == R.id.profile) {
-            Intent i=new Intent(this, ProfileFrag.class);
-            i.putExtra("userID",this.userID);
-            startActivity(i);
+            this.openProfile();
         } else if (id == R.id.car) {
-            Intent i=new Intent(this, Mycars.class);
-            i.putExtra("userID",this.userID);
-            i.putExtra("deviceID",this.deviceID);
-            startActivity(i);
+            //Cars clicked
+            this.viewCars();
         } else if (id == R.id.logout) {
-            Intent i=new Intent(this,LoginActivity.class);
-            startActivity(i);
-            finish();
-
+            //Logout clicked
+            this.logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.menu);
