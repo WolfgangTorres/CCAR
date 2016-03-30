@@ -76,7 +76,7 @@ public class MyAdapter extends BaseAdapter{
             convertView = activity.getLayoutInflater().inflate(R.layout.mycars_line, null);
 
 
-            TextView txt1 = (TextView) convertView.findViewById(R.id.modelo);
+            TextView txt1 = (TextView) convertView.findViewById(R.id.brand);
             TextView txt2 = (TextView) convertView.findViewById(R.id.colorCarro);
             TextView txt3 = (TextView) convertView.findViewById(R.id.placas);
 

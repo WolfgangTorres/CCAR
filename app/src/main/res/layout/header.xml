@@ -19,7 +19,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="false"
         android:paddingLeft="10dp"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:textColor="#ffffff" />
 
 
 </RelativeLayout>
