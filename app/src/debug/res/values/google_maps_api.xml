@@ -16,13 +16,14 @@
     string in this file.
     -->
     <!-- (Andres Key) -->
-
+    <!--
     <string name="google_maps_key" templateMergeStrategy="preserve" >
         AIzaSyDqRTaITZSw8tGU9OoZmuQTnzQ7Z-iR9Lo
     </string>
+    -->
 
-    <!-- (Renato Key)
+    <!-- (Renato Key) -->
     <string name="google_maps_key" templateMergeStrategy="preserve" >
         AIzaSyBD0GTbaq_2HXeyJSAKZCbovgKtHC_sass
-    </string>-->
+    </string>
 </resources>

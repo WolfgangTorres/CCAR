@@ -179,8 +179,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if(this.deviceID.equals("")){
             //Notify user change
             this.ShowToast("Aún no tienes un dispositivo", Toast.LENGTH_SHORT);
-
-            return;
         }
     }
 
@@ -385,7 +383,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
         //Fire only when cristalazo alert occurs; avoid initial retrieve
-        if(this.newChildAdded) {
+        if(this.newChildAdded && this.statusProtection) {
             //Initialize Cristalazo Alert Activity
             final Intent i = new Intent(this, Alerta.class);
 
