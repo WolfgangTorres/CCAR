@@ -48,9 +48,23 @@
         android:layout_height="100dp"
         android:text="GO"
         android:id="@+id/buttonGo"
-        android:layout_below="@+id/listView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
         android:background="@drawable/roundbutton"
-        android:textColor="#ffff" />
+        android:textColor="#ffff"
+        android:onClick="goToRuta"
+        android:layout_below="@+id/listView"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="CALL"
+        android:id="@+id/buttonCall"
+        android:layout_alignTop="@+id/buttonGo"
+        android:layout_toEndOf="@+id/buttonGo"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/roundbuttoncall"
+        android:backgroundTint="#ff0000"
+        android:textColor="#ffffff"
+        android:onClick="callEmergency" />
 </RelativeLayout>

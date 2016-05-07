@@ -1,18 +1,18 @@
 package com.example.andrestorresb.ccar;
 
-import com.google.maps.GeoApiContext;
-import com.google.maps.DistanceMatrixApi;
-
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +20,11 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
+import com.google.maps.DistanceMatrixApi;
+import com.google.maps.GeoApiContext;
 import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.LatLng;
@@ -111,6 +113,7 @@ public class Alerta extends AppCompatActivity implements
         this.deviceLat = (Double) location.get("lat");
         this.deviceLon = (Double) location.get("lon");
 
+
         //Get Address from lat & lon
         Geocoder gc = new Geocoder(this);
         try {
@@ -148,7 +151,6 @@ public class Alerta extends AppCompatActivity implements
 
     private void setDistance(LatLng origin, LatLng destination, boolean isWalking) {
         String distance = this.getDistance(origin, destination, isWalking);
-
         this.distanceLabel.setText(distance);
     }
 
@@ -223,7 +225,7 @@ public class Alerta extends AppCompatActivity implements
         boolean isWalking = true;
 
         //Set distance from user to device
-        this.setDistance( userLocation, deviceLocation, isWalking );
+        this.setDistance(userLocation, deviceLocation, isWalking);
     }
 
     private void requestUserLocation(){
@@ -299,4 +301,21 @@ public class Alerta extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
+
+
+    public void goToRuta(View v){
+        Intent i = new Intent();
+        i.putExtra("latUser", this.myLat);
+        i.putExtra("lonUser", this.myLon);
+        i.putExtra("latDev", this.deviceLat);
+        i.putExtra("lonDev", this.deviceLon);
+        setResult(Activity.RESULT_OK, i);
+        finish();
+    }
+
+    public void callEmergency(View v){
+        Intent intent=new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:066"));
+        startActivity(intent);
+    }
 }
