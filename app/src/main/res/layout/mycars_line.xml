@@ -10,35 +10,48 @@
     tools:context="com.example.andrestorresb.ccar.Mycars">
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/brand"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:text="Ferrari"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/carImage"
+        android:paddingLeft="30dp" />
 
 
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/colorCarro"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:layout_below="@+id/brand"
-        android:layout_alignStart="@+id/brand" />
+        android:layout_alignStart="@+id/brand"
+        android:paddingLeft="30dp" />
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/placas"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:layout_below="@+id/colorCarro"
-        android:layout_alignStart="@+id/colorCarro" />
+        android:layout_alignStart="@+id/colorCarro"
+        android:paddingLeft="30dp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/carImage"
+        android:background="@drawable/car"
+        android:layout_marginStart="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="9dp" />
 
 </RelativeLayout>

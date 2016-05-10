@@ -51,4 +51,8 @@ public class Vehiculo {
     public void setMarca(String marca) {
         this.marca = marca;
     }
+
+    public boolean isEmpty(){
+        return this.marca.equals("") && this.color.equals("") && this.placa.equals("");
+    }
 }

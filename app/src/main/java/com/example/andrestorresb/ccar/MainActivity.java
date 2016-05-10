@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -111,6 +112,59 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Toast.makeText(this, "On Resumen!", Toast.LENGTH_SHORT).show();
+
+        String endpoint = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDevices.php?userID=" + this.userID;
+
+        Log.d("getDevices", endpoint);
+
+        new JSONRequest(this, new JSONRequest.JSONListener() {
+            @Override
+            public void doSomething(JSONObject array) {
+                if(array != null){
+                    try {
+                        JSONArray devices = array.getJSONArray("devices");
+
+                        Log.d("getDevices", devices.toString() + " , " + devices.length());
+
+                        if(devices.length() > 0){
+                            deviceID = devices.get(0).toString();
+
+                            //Avoid changing due to no device owned
+                            noDevices();
+
+                            //Get Device Location
+                            //get through map init
+
+                            //Get & Set Device Protection
+                            getDeviceProtection();
+
+                            //Set user info
+
+                            //Listen Cristalazo Alert
+                            listenCristalazoAlert();
+
+                            getDeviceLocationOnce();
+                        }else{
+                            //Avoid changing due to no device owned
+                            noDevices();
+
+                            cleanMap();
+
+                            Log.d("getDevices", "Clean Mape!");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute(endpoint);
     }
 
     private void init(){
@@ -299,6 +353,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.prevMarker = this.currentMarker;
     }
 
+    //Clean map
+    private void cleanMap(){
+        this.currentMarker.remove();
+    }
+
     //Initialize Firebase
     private void initializeFirebase(){
         //Initialize Firebase
@@ -309,14 +368,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.fb.authWithCustomToken(FIREBASE_TOKEN, this);
     }
 
-
-
     //Retrieve Device Location from CCAR Platform
     private void getDeviceLocation(){
         this.actionFirebase = GET_CAR_LOCATION;
 
         //Get location from CCAR Platform
         if(!this.deviceID.equals("")) this.fb.child(DEVICES + "/" + this.deviceID + "/location").addValueEventListener(this);
+    }
+
+    private void getDeviceLocationOnce(){
+        if(!this.deviceID.equals("")) this.fb.child(DEVICES + "/" + this.deviceID + "/location").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                actionFirebase = GET_CAR_LOCATION;
+                initialPosition = true;
+
+                setLocationDevice(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     //Retrieve Device Protection from CCAR Platform
@@ -351,6 +425,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onAuthenticationError(FirebaseError firebaseError) { this.ShowToast("Fail to Auth", Toast.LENGTH_LONG); }
 
+    private void setLocationDevice(DataSnapshot dataSnapshot){
+        //Set location of device (firebase pure because realtime)
+        this.lat = Double.parseDouble(dataSnapshot.child("lat").getValue().toString());
+        this.lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
+        this.timeLastLocation = Integer.parseInt(dataSnapshot.child("time").getValue().toString());
+
+        //Represent in map
+
+        //When localization module is ON
+        if(this.statusLocalization) this.carLocate();
+
+        //When initialPosition is ON
+        if(this.initialPosition){
+            this.carLocate();
+            this.initialPosition = false;
+        }
+    }
+
     //Firebase callback on SingleEvent
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -359,21 +451,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Detect action request to Firebase
         switch (this.actionFirebase){
             case GET_CAR_LOCATION:
-                //Set location of device (firebase pure because realtime)
-                this.lat = Double.parseDouble(dataSnapshot.child("lat").getValue().toString());
-                this.lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
-                this.timeLastLocation = Integer.parseInt(dataSnapshot.child("time").getValue().toString());
-
-                //Represent in map
-
-                //When localization module is ON
-                if(this.statusLocalization) this.carLocate();
-
-                //When initialPosition is ON
-                if(this.initialPosition){
-                    this.carLocate();
-                    this.initialPosition = false;
-                }
+                setLocationDevice(dataSnapshot);
 
                 break;
         }
@@ -391,7 +469,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             i.putExtra("alert", (Serializable) dataSnapshot.getValue());
 
             //Get car info
-            String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceCarInfo.php?devID=" + this.deviceID;
+            final String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceCarInfo.php?devID=" + this.deviceID + "&userID=" + this.userID;
             new JSONRequest(this, new JSONRequest.JSONListener() {
                 @Override
                 public void doSomething(JSONObject array) {
@@ -467,11 +545,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0){
+            //Result from MyCars
+            if(data != null){
+                //Reload device on map
+                String deviceEdited = data.getStringExtra("deviceID");
+
+                this.deviceID = deviceEdited;
+            }
+        }
+    }
+
     private void viewCars(){
         Intent i=new Intent(this, Mycars.class);
         i.putExtra("userID",this.userID);
         i.putExtra("deviceID",this.deviceID);
-        startActivity(i);
+        startActivityForResult(i, 0);
     }
 
     private void openProfile(){
