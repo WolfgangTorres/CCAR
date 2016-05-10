@@ -75,6 +75,16 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/localizationButton"
             android:onClick="menu" />
+
+        <ImageButton
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:id="@+id/cancelRoute"
+            android:layout_alignBottom="@+id/localizationButton"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="false"
+            android:background="@drawable/x_button"
+            android:onClick="stopRoute" />
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
