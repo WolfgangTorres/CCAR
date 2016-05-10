@@ -1,15 +1,18 @@
 package com.example.andrestorresb.ccar;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -67,7 +70,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private final String PROTECTION_ON = "Protegido",
                          PROTECTION_OFF = "No Protegido",
                          LOCALIZATION = "Localizando";
-    private final int CODE = 0;
+    private final int CODE = 0,
+                      VIEW_CARS = 1;
+
+    private int statusAlert;
+    private final int CRISTALAZO_ALERT = 9,
+                      STAND_BY = 0;
 
     double myLat, myLon,devLat,devLon;
 
@@ -77,8 +85,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private final String GoogleServerApiKey = "AIzaSyAnB50FhXE1HqnFveR6uXnYzKQO8vYrEfY";
     Polyline newPolyline;
     Marker marker;
-
-
 
     //Google maps
     private Marker currentMarker,
@@ -115,6 +121,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private boolean locacion1=true;
 
+    private NavigationView navigationView;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +130,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
 
         this.menu=(DrawerLayout)findViewById(R.id.menu);
-        NavigationView navigationView=(NavigationView)findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        this.navigationView=(NavigationView)findViewById(R.id.nav_view);
+        this.navigationView.setNavigationItemSelectedListener(this);
 
         //Left button
         this.localizationButton = (ImageButton)findViewById(R.id.localizationButton);
@@ -167,53 +175,57 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
 
+        this.setUsername();
+
         //Toast.makeText(this, "On Resumen!", Toast.LENGTH_SHORT).show();
 
-        String endpoint = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDevices.php?userID=" + this.userID;
+        //Execute only when its stand_by (not on cristalazo alert occure)
+        if(this.statusAlert == STAND_BY) {
+            String endpoint = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDevices.php?userID=" + this.userID;
 
-        Log.d("getDevices", endpoint);
+            Log.d("getDevices", endpoint);
 
-        new JSONRequest(this, new JSONRequest.JSONListener() {
-            @Override
-            public void doSomething(JSONObject array) {
-                if(array != null){
-                    try {
-                        JSONArray devices = array.getJSONArray("devices");
+            new JSONRequest(this, new JSONRequest.JSONListener() {
+                @Override
+                public void doSomething(JSONObject array) {
+                    if (array != null) {
+                        try {
+                            JSONArray devices = array.getJSONArray("devices");
 
-                        Log.d("getDevices", devices.toString() + " , " + devices.length());
+                            Log.d("getDevices", devices.toString() + " , " + devices.length());
 
-                        if(devices.length() > 0){
-                            deviceID = devices.get(0).toString();
+                            if (devices.length() > 0) {
+                                deviceID = devices.get(0).toString();
 
-                            //Avoid changing due to no device owned
-                            noDevices();
+                                //Avoid changing due to no device owned
+                                noDevices();
 
-                            //Get Device Location
-                            //get through map init
+                                //Get Device Location
+                                //get through map init
 
-                            //Get & Set Device Protection
-                            getDeviceProtection();
+                                //Get & Set Device Protection
+                                getDeviceProtection();
 
-                            //Set user info
+                                //Set user info
 
-                            //Listen Cristalazo Alert
-                            listenCristalazoAlert();
+                                getDeviceLocationOnce();
+                            } else {
+                                //Avoid changing due to no device owned
+                                noDevices();
 
-                            getDeviceLocationOnce();
-                        }else{
-                            //Avoid changing due to no device owned
-                            noDevices();
+                                cleanMap();
 
-                            cleanMap();
-
-                            Log.d("getDevices", "Clean Mape!");
+                                Log.d("getDevices", "Clean Mape!");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 }
-            }
-        }).execute(endpoint);
+            }).execute(endpoint);
+        }
+
+        this.statusAlert = STAND_BY;
     }
 
     private void init(){
@@ -248,9 +260,35 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         this.getDeviceProtection();
 
         //Set user info
+        this.setUsername();
 
         //Listen Cristalazo Alert
         this.listenCristalazoAlert();
+    }
+
+    private void setUsername(){
+        String endpointPersonalInfo = "http://renatogutierrez.com/apps/CCAR/Plataforma/getUserPersonalInfo.php?userID=" + this.userID;
+        new JSONRequest(this, new JSONRequest.JSONListener() {
+            @Override
+            public void doSomething(JSONObject array) {
+                if(array != null){
+                    try {
+                        JSONObject data = array.getJSONObject("response");
+
+                        if(data != null){
+                            String name = data.getString("name");
+                            String lastname = data.getString("lastname");
+
+                            Menu menu = navigationView.getMenu();
+                            MenuItem labelUsername = menu.findItem(R.id.informacion);
+                            labelUsername.setTitle(name + " " + lastname);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute(endpointPersonalInfo);
     }
 
     //Change state of components when protect ON || OFF
@@ -451,7 +489,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Request Device Protection from CCAR Platform
         String url = "http://renatogutierrez.com/apps/CCAR/Plataforma/getDeviceProtection.php?devID=" + this.deviceID;
-        new JSONRequest(this, this).execute(url);
+        new JSONRequest(this, new JSONRequest.JSONListener() {
+            @Override
+            public void doSomething(JSONObject array) {
+                try {
+                    JSONObject jsonobj = array;
+
+                    Log.d("currentProtection", jsonobj.getBoolean("response") + ", " + jsonobj.getString("response"));
+
+                    //Set protection
+                    statusProtection = jsonobj.getBoolean("response");
+
+                    componentsOfProtect(statusProtection);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(url);
 
         /*
             Result:
@@ -565,23 +620,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void doSomething(JSONObject array) {
 
         switch (this.actionFirebase){
-            case GET_DEVICE_PROTECTION:
-
-                try {
-                    JSONObject jsonobj = array;
-
-                    //Set protection
-                    if(jsonobj.getString("response").equals("true")) this.statusProtection = true;
-                    else this.statusProtection = false;
-
-                    this.componentsOfProtect(this.statusProtection);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-
             case SET_DEVICE_PROTECTION:
 
                 try{
@@ -597,24 +635,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 0){
-            //Result from MyCars
-            if(data != null){
-                //Reload device on map
-                String deviceEdited = data.getStringExtra("deviceID");
-
-                this.deviceID = deviceEdited;
-            }
-        }
-    }
-
     private void viewCars(){
         Intent i=new Intent(this, Mycars.class);
         i.putExtra("userID", this.userID);
         i.putExtra("deviceID",this.deviceID);
-        startActivityForResult(i, 0);
+        startActivityForResult(i, VIEW_CARS);
     }
 
     private void openProfile(){
@@ -693,7 +718,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == this.CODE && resultCode == Activity.RESULT_OK){
+        if(requestCode == this.CODE && resultCode == Activity.RESULT_OK) {
+            this.statusAlert = CRISTALAZO_ALERT;
+
             locationRequest = LocationRequest.create();
             locationRequest.setInterval(10000);
             locationRequest.setFastestInterval(5000);
@@ -703,16 +730,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             fusedLocationProviderApi = LocationServices.FusedLocationApi;
 
 
-            this.myLat=data.getDoubleExtra("latUser",0);
-            this.myLon=data.getDoubleExtra("lonUser",0);
-            this.devLat=data.getDoubleExtra("latDev",0);
-            this.devLon=data.getDoubleExtra("lonDev",0);
+            this.myLat = data.getDoubleExtra("latUser", 0);
+            this.myLon = data.getDoubleExtra("lonUser", 0);
+            this.devLat = data.getDoubleExtra("latDev", 0);
+            this.devLon = data.getDoubleExtra("lonDev", 0);
             this.localizationButton.setVisibility(View.INVISIBLE);
             this.protectionButton.setVisibility(View.INVISIBLE);
             this.cancelRoute.setVisibility(View.VISIBLE);
             this.setDistance(new LatLng(this.myLat, this.myLon), new LatLng(this.devLat, this.devLon), true);
-            this.findDirections(this.myLat,this.myLon,this.devLat,this.devLon,GMapRuta.MODE_WALKING);
+            this.findDirections(this.myLat, this.myLon, this.devLat, this.devLon, GMapRuta.MODE_WALKING);
             this.startLocationUpdates();
+        } else if(requestCode == VIEW_CARS){
+            //Result from MyCars
+            if(data != null){
+                //Reload device on map
+                String deviceEdited = data.getStringExtra("deviceID");
+
+                this.deviceID = deviceEdited;
+            }
         }
 
     }
