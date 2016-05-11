@@ -46,7 +46,7 @@
     <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text="GO"
+        android:text="IR"
         android:id="@+id/buttonGo"
         android:background="@drawable/roundbutton"
         android:textColor="#ffff"
