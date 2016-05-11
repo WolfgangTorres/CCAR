@@ -4,15 +4,15 @@
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_person_black"
-        android:title="Profile" />
+        android:title="Perfil" />
     <item
         android:id="@+id/car"
         android:icon="@drawable/ic_directions_car_black"
-        android:title="My Cars" />
+        android:title="Mis autos" />
     <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_settings_power_black"
-        android:title="Logout" />
+        android:title="Cerrar sesión" />
 
 
     </group>
