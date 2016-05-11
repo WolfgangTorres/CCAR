@@ -32,12 +32,8 @@ public class GMapRuta {
                 + "&sensor=false&units=metric&mode=" + mode;
         URL url1;
 
+
         try {
-            /*HttpClient httpC=new DefaultHttpClient();
-            HttpContext localC=new BasicHttpContext();
-            HttpPost httpP=new HttpPost(url);
-            HttpResponse response=httpC.execute(httpP,localC);
-            InputStream is= response.getEntity().getContent();*/
             url1=new URL(url.toString());
             HttpURLConnection urlConnection= (HttpURLConnection) url1.openConnection();
             InputStream is = new BufferedInputStream(urlConnection.getInputStream());

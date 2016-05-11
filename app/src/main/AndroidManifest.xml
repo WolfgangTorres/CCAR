@@ -13,7 +13,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -28,15 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity">
 
         </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".Alerta" />
 
         <meta-data
@@ -55,16 +49,23 @@
         -->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProfileFrag" />
-        <activity android:name=".Mycars"></activity>
-        <activity android:name=".Editar"
-                android:parentActivityName=".Mycars"></activity>
-
-        <activity android:name=".CaptureActivityPortrait"
+        <activity android:name=".Mycars" />
+        <activity
+            android:name=".Editar"
+            android:parentActivityName=".Mycars" />
+        <activity
+            android:name=".CaptureActivityPortrait"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
         </activity>
     </application>
 

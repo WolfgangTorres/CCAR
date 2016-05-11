@@ -3,7 +3,6 @@ package com.example.andrestorresb.ccar;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -74,7 +73,6 @@ public class JSONRequest extends AsyncTask<String, Void, JSONObject> {
         if(jsonArray != null) {
             //Successfully read JSON
             listener.doSomething(jsonArray);
-
             return;
         }
 
